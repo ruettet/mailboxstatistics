@@ -18,3 +18,15 @@ class MailboxStatisticsTest(unittest.TestCase):
     def test_get_n_most_frequent_from_values(self):
         n_most_frequent_from_values = self.mailbox.get_n_most_frequent_from_values()
         self.assertEqual(len(n_most_frequent_from_values), 1)
+
+    def test_get_number_of_mails_per_hour(self):
+        mails_per_hour = self.mailbox.get_number_of_mails_per_hour()
+        self.assertTrue(isinstance(mails_per_hour, Counter))
+
+    def test_get_number_of_mails_per_hour_of_day(self):
+        mails_per_hour_of_day = self.mailbox.get_number_of_mails_per_hour_of_day()
+        self.assertTrue(isinstance(mails_per_hour_of_day, Counter))
+
+    def test_get_number_of_mails_per_day(self):
+        mails_per_day = self.mailbox.get_number_of_mails_per_day()
+        self.assertTrue(isinstance(mails_per_day, Counter))
