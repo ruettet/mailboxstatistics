@@ -1,0 +1,1 @@
+MailboxStatistics reads in the output of a Save as... action in MS Outlook on a selection of emails and returns a Python object of that output, together with a series of useful commands for getting some statistics about your mailbox.
