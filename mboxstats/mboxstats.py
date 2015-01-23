@@ -25,8 +25,11 @@ class MailboxStatistics(object):
 
                 self.mailbox.append(message)
 
-    def get_mailbox_from_values(self):
+    def get_from_values(self):
         return [message['from'] for message in self.mailbox]
 
-    def get_mailbox_from_value_counts(self):
-        return Counter(self.get_mailbox_from_values())
+    def get_from_value_counts(self):
+        return Counter(self.get_from_values())
+
+    def get_n_most_frequent_from_values(self, n=1):
+        return self.get_from_value_counts().most_common(n)
