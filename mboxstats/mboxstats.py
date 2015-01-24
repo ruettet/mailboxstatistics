@@ -7,6 +7,10 @@ from collections import Counter
 
 
 class MailboxStatistics(object):
+    def __init__(self):
+        """ Generic MailboxStatistics object that contains the statistics calculations. """
+        self.mailbox = []
+
     def get_from_values(self):
         return [message['from'] for message in self.mailbox]
 
@@ -27,21 +31,24 @@ class MailboxStatistics(object):
 
 
 class OutlookMailboxStatistics(MailboxStatistics):
-    def __init__(self, path_to_mbox_file):
-        self.mailbox = []
-        with codecs.open(path_to_mbox_file, 'r', 'latin1') as mailbox_file:
+    def __init__(self, path_to_mbox_file, mbox_file_encoding, mbox_file_datetime_locale, mbox_file_datetime_format):
+        """ Parses the text file that results from saving (multiple) messages in MS Outlook as text.
+        :param path_to_mbox_file: full path to mbox file
+        :param mbox_file_encoding: encoding of mbox file, for MS Outlook, this is typically latin1
+        :param mbox_file_datetime_locale: locale to be used for parsing the datetime field
+        :param mbox_file_datetime_format: format of the datetime string for parsing
+        """
+        MailboxStatistics.__init__(self)
+        with codecs.open(path_to_mbox_file, 'r', mbox_file_encoding) as mailbox_file:
             self.raw_messages = mailbox_file.read().split("From:\t")
         for raw_message in self.raw_messages:
             if len(raw_message.split('\n')) > 5:
-                message = {}
-
-                message['from'] = raw_message.split('\n')[0].strip()
-
+                message = {'from': raw_message.split('\n')[0].strip()}
                 to_line = compile('To:\t(.+?)\r\n').findall(raw_message)
-                message['to'] = [sub('[\'"]', '', item).strip() for item in to_line[0].split(';')] if len(to_line) > 0 else []
-
-                locale.setlocale(locale.LC_ALL, 'nl_BE')
-                message['sent'] = datetime.strptime(compile('Sent:\t(.+?)\r\n').findall(raw_message)[0], '%A %d %B %Y %H:%M')
+                message['to'] = [sub('[\'"]', '', item).strip()
+                                 for item in to_line[0].split(';')] if len(to_line) > 0 else []
+                locale.setlocale(locale.LC_ALL, mbox_file_datetime_locale)
+                message['sent'] = datetime.strptime(compile('Sent:\t(.+?)\r\n').findall(raw_message)[0],
+                                                    mbox_file_datetime_format)
                 locale.resetlocale()
-
                 self.mailbox.append(message)

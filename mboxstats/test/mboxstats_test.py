@@ -1,12 +1,12 @@
 import unittest
-from mboxstats.mboxstats import MailboxStatistics
 from mboxstats.mboxstats import OutlookMailboxStatistics
 from collections import Counter
 
 
-class MailboxStatisticsTest(unittest.TestCase):
+class OutlookMailboxStatisticsTest(unittest.TestCase):
     def setUp(self):
-        self.mailbox = OutlookMailboxStatistics("/media/sf_datasets/mails/received-2014.txt")
+        self.mailbox = OutlookMailboxStatistics('/media/sf_datasets/mails/received-2014.txt', 'latin1', 'nl_BE',
+                                                '%A %d %B %Y %H:%M')
 
     def test_get_from_values(self):
         from_values = self.mailbox.get_from_values()
