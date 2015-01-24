@@ -8,6 +8,10 @@ class OutlookMailboxStatisticsTest(unittest.TestCase):
         self.mailbox = OutlookMailboxStatistics('/media/sf_datasets/mails/received-2014.txt', 'latin1', 'nl_BE',
                                                 '%A %d %B %Y %H:%M')
 
+    def test_get_number_of_mails(self):
+        mail_count = self.mailbox.get_number_of_mails()
+        self.assertTrue(isinstance(mail_count, int))
+
     def test_get_from_value_counts(self):
         from_value_counts = self.mailbox.get_from_value_counts()
         self.assertTrue(isinstance(from_value_counts, Counter))

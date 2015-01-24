@@ -11,6 +11,9 @@ class MailboxStatistics(object):
         """ Generic MailboxStatistics object that contains the statistics calculations. """
         self.mailbox = []
 
+    def get_number_of_mails(self):
+        return len(self.mailbox)
+
     def __get_from_values(self):
         return [message['from'] for message in self.mailbox]
 
