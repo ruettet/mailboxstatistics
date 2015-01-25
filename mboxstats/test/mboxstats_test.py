@@ -5,7 +5,7 @@ from collections import Counter
 
 class OutlookMailboxStatisticsTest(unittest.TestCase):
     def setUp(self):
-        self.mailbox = OutlookMailboxStatistics('/media/sf_datasets/mails/received-2014.txt', 'latin1', 'nl_BE',
+        self.mailbox = OutlookMailboxStatistics('/media/sf_datasets/mails/sirris-2014.txt', 'latin1', 'nl_BE',
                                                 '%A %d %B %Y %H:%M')
 
     def test_get_number_of_mails(self):
@@ -27,6 +27,10 @@ class OutlookMailboxStatisticsTest(unittest.TestCase):
     def test_get_number_of_mails_per_day(self):
         mails_per_day = self.mailbox.get_number_of_mails_per_day()
         self.assertTrue(isinstance(mails_per_day, Counter))
+
+    def test_get_number_of_mails_per_weekday(self):
+        mails_per_weekday = self.mailbox.get_number_of_mails_per_weekday()
+        self.assertTrue(isinstance(mails_per_weekday, Counter))
 
     def test_get_subject_token_frequencies(self):
         subject_token_frequencies = self.mailbox.get_subject_token_frequencies()

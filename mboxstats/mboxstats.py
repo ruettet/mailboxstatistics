@@ -1,7 +1,9 @@
 import codecs
 import locale
+from mailbox import mbox
 from re import sub
 from re import compile
+from re import IGNORECASE
 from datetime import datetime
 from collections import Counter
 
@@ -54,7 +56,7 @@ class MailboxStatistics(object):
         """
         :return: A Counter object the amount of mails per week day [0 - 6].
         """
-        return Counter([message['sent'].weekday for message in self.mailbox])
+        return Counter([message['sent'].weekday() for message in self.mailbox])
 
     def __get_subject_tokens(self):
         return [token for message in self.mailbox for token in message['subject'].split()]
@@ -66,6 +68,10 @@ class MailboxStatistics(object):
         return Counter(self.__get_subject_tokens())
 
     # TODO def get_subject_token_frequencies_by_from_values(self):
+    # TODO def get_igraph(self):
+    # TODO def get_igraph_edgelist(self):
+    # TODO def filter_mailbox_on_to_values(self, to_values=[], operator='or', strict=True):
+    # TODO def filter_mailbox_on_from_value(self, from_value=compile('', IGNORECASE)):
 
 
 class OutlookMailboxStatistics(MailboxStatistics):
@@ -92,3 +98,12 @@ class OutlookMailboxStatistics(MailboxStatistics):
                 subject_line = compile('Subject:\t(.+?)\r\n').findall(raw_message)
                 message['subject'] = sub('(re|fw):', '', subject_line[0].lower()) if len(subject_line) > 0 else 'NA'
                 self.mailbox.append(message)
+
+
+# class GMailMailboxStatistics(MailboxStatistics):
+#     def __init__(self, path_to_mbox_file):
+#         """ Parses the mbox file that results from a gmail export.
+#         :param path_to_mbox_file: full path to the downloaded mbox file
+#         """
+#         MailboxStatistics.__init__(self)
+#         self.mailbox = mbox(path_to_mbox_file)
